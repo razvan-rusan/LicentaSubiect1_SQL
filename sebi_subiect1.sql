@@ -23,7 +23,7 @@ CREATE TABLE bazbo_epic.Users (
     id_rol int not null foreign key references bazbo_epic.Roles(id)
 )
 
-DELETE * FROM bazbo_epic.Users;
+DELETE FROM bazbo_epic.Users;
 INSERT INTO pregatire_licenta.bazbo_epic.Users (nume, parola, id_rol) VALUES (N'Mihai Criste', N'xohoaho', 1);
 INSERT INTO pregatire_licenta.bazbo_epic.Users (nume, parola, id_rol) VALUES (N'Matei Labo', N'oaugwuohn', 2);
 INSERT INTO pregatire_licenta.bazbo_epic.Users (nume, parola, id_rol) VALUES (N'Cristian Bălănean', N'wibibqopmwr', 1);
@@ -41,7 +41,8 @@ CREATE TABLE bazbo_epic.Articole (
     continut nvarchar(max)
 )
 
-DELETE * FROM bazbo_epic.Articole;
+DROP TABLE bazbo_epic.Articole;
+DELETE FROM bazbo_epic.Articole;
 INSERT INTO pregatire_licenta.bazbo_epic.Articole (id_autor, titlu, continut) VALUES (1, N'Despre Viața Câinilor', N'Orice câine e bine să aibă și un stăpân.');
 INSERT INTO pregatire_licenta.bazbo_epic.Articole (id_autor, titlu, continut) VALUES (3, N'Primul Meu Joc Video', N'Am făcut șah cu reguli schimbate');
 INSERT INTO pregatire_licenta.bazbo_epic.Articole (id_autor, titlu, continut) VALUES (5, N'Fenomenul Affogato: Ce Trebuie Să Știi', N'Affogato e un glob de înghețată care plutește într-o cană de espresso. Nu poți să îi reziști.');
@@ -69,7 +70,7 @@ CREATE TABLE bazbo_epic.Note (
     nota int not null,
 )
 
-DELETE * FROM bazbo_epic.Note;
+DELETE FROM bazbo_epic.Note;
 INSERT INTO pregatire_licenta.bazbo_epic.Note (id_articol, nota) VALUES (1, 5);
 INSERT INTO pregatire_licenta.bazbo_epic.Note (id_articol, nota) VALUES (1, 4);
 INSERT INTO pregatire_licenta.bazbo_epic.Note (id_articol, nota) VALUES (1, 3);
@@ -97,11 +98,22 @@ ON Articole.id = Note.id_articol
 GROUP BY titlu
 ORDER BY nota DESC
 
+-- select avg(note.valoare), articole.nume_articol from bazbo_epic.Note
+-- JOIN bazbo_epic.Articole ON Note.id_articol = Articole.id
+-- GROUP BY avg(note.valoare), articole.nume_articol
+-- ORDER BY nota DESC
+
+
 -- d) autorii in ordine descrescatoare a nr de articole publicate
 select nume, count(distinct Articole.id) as articole_publicate from bazbo_epic.Users INNER JOIN bazbo_epic.Articole
 ON Users.id = Articole.id_autor
 GROUP BY nume
 ORDER BY articole_publicate DESC
+
+-- select user.id_user, user.nume_user, count(articole.id_articol) from bazbo_epic.Users JOIN bazbo_epic.Articole
+-- ON Users.id = Articole.id_user
+-- group by user.id_user, user.nume_user
+-- order by count(articole.id_articol)
 
 -- e) articolele fara comentarii
 select * from bazbo_epic.Articole left join bazbo_epic.Comentarii
